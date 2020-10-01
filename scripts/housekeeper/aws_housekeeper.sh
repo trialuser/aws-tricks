@@ -19,8 +19,8 @@ success() {
 }
 
 loading_modules() {
-  if [[ -f $DIR/$1 ]]; then
-    source $DIR/$1
+  if [[ -f $DIR/modules/$1 ]]; then
+    source $DIR/modules/$1
     success $1
   else
     error "ERROR WHILE LOADING $1"
