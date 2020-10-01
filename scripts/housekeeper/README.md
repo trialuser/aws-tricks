@@ -57,81 +57,18 @@ Other variables are set as the constant vairables and define the price for diffe
 
 <hr/>
 
-# Deletion scripts  
-
-
-## delete-ebs-volumes.sh
-
-* This script is used to delete  Elastic Block Volumes (EBS) volumes.
-
-  * **Use on unattached EBS volumes only.**
-
-* Usage:
-
-   * Edit `./ebs-volumes/ebs-unattached.txt` so that each line has a the ID of the volume to be deleted.
-   * Run `REGION=eu-west-1 PROFILE=project-staging ./delete-ebs-volumes.sh`
-
-<hr/>
-
-
-
-## delete-ebs-snaps.sh
-
-* This script is used to delete Elastic Block Volumes (EBS) snapshots.
-
-  * All orphaned snaps are deleted.
-
-  * All **aged snaps are deleted, unless they are the most recent** snap available.
-
-* Usage:
-
-  * Edit `./ebs-snaps/ebs-aged.txt` and  `./ebs-snaps/ebs-orphaned.txt` so that each line has an EBS ID that is to be deleted.
-  * Run `REGION=eu-west-1 PROFILE=project-staging ./delete-ebs-snaps.sh`
-
-<hr/>
-
-
-
-## delete-rbs-snaps.sh
-
-* This script is used to delete Relational Database Systems (RDS) snapshots.
-
-  * All **aged snaps are deleted, unless they are the most recent** snap available.
-
-* Usage:
-
-  * Edit `./rds-snaps/rds-aged.txt` so that each line has an EBS ID that is to be deleted.
-  * Run `REGION=eu-west-1 PROFILE=project-staging ./delete-rds-snaps.sh`
-
-<hr/>
-
-
-
 ## ToDo's
 
 * Edit housekeeper script so that all regions are runned at once.
 * Consider a complete automation (housekeeper to detect problems, followed by deleters to clean them). Is it possible? How difficult is it?
+* Total cost
+* Check for dependences
+* Update README
+* Add modules for old AMIs
 
 * The cleanup must be handled by region, which is extremely inefficient.
   * We will try to add the resources from all region, and just let the deletion fail on those resources that do not belong there.
 
+# N.B. 
+When adding functionality, please use separate files connected to the main one.
 <hr />
-
-# Monitoring Scripts
-
-## check_certificates.sh
-
-This script is used to check and monitor the expiration date for domains listed in data-to-check/$PROFILE_domains.txt.
-
-### Usage
-
-Update PROFILE in `./check_certificates.sh`, then edit the list in `data-to-check/$PROFILE_domains.txt`, 
-e.g. in `data-to-check/microsites_domains.txt`. The script can be setup in cron and will send 
-the notifications via email automatically.
-
-Make sure you also set correctly some other parameters in this script: `SENDMAIL_BIN` - full path to sendmail 
-(if this is installed), `OPENSSL_BIN` - full path to openssl binary, `TIMEOUT_BIN` - full path to timeout 
-utility (coreutils). Next parameters: `ALERT` - the number of days when the SSL is marked as expired for 
-alerting, `SHOW_HTTP_WARNS` - set to 1 when you need to see the notifications about domains from teh list 
-that don't have HTTPS configured, `EMAIL_TO` - list of emails (comma separated) for sending notifications 
-via email. Both `EMAIL_TO` and `SENDMAIL_BIN` should be set to send the notifications.
